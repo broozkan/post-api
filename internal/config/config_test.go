@@ -17,7 +17,7 @@ func TestConfig_New(t *testing.T) {
 	t.Run("test given test config file when I call new then it should return config", func(t *testing.T) {
 		actualConfig, _ := config.New(configPath, configName)
 
-		expectedConfig := config.Config{
+		expectedConfig := &config.Config{
 			AppName: "something-special",
 			Server:  config.Server{Port: "1111"},
 		}

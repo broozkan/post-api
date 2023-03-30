@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"broozkan/postapi/internal/config"
+
 	"go.uber.org/zap"
 )
 
@@ -15,8 +17,13 @@ func main() {
 }
 
 func run() error {
-	_ = os.Getenv("APP_ENV")
+	appEnv := os.Getenv("APP_ENV")
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+	conf, err := config.New("../.config", appEnv)
+	if err != nil {
+		return err
+	}
+	logger.Info("config loaded", zap.Any("config", conf))
 	return nil
 }
