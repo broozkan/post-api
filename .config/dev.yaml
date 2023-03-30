@@ -1,0 +1,3 @@
+AppName: "post-api-dev"
+Server:
+  Port: 3000

@@ -1,0 +1,3 @@
+AppName: "post-api-prod"
+Server:
+  Port: 3000
