@@ -6,11 +6,13 @@ import (
 
 type (
 	Config struct {
-		AppName      string
-		Server       Server
-		AdsEnabled   bool
-		AdsFrequency int
-		ItemPerPage  int
+		AppName        string
+		Server         Server
+		AdsEnabled     bool
+		AdsFrequency   int
+		ItemPerPage    int
+		AuthorPrefix   string
+		AuthorIDLength int
 	}
 	Server struct {
 		Port string

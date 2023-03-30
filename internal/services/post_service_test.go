@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"broozkan/postapi/internal/config"
 	"broozkan/postapi/internal/mocks"
 	"broozkan/postapi/internal/models"
 	"broozkan/postapi/internal/services"
@@ -16,6 +17,7 @@ import (
 )
 
 func TestPostService_CreatePost(t *testing.T) {
+	conf := &config.Config{}
 	t.Run("given post request when repository is ok then it should return nil", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		mockRepository := mocks.NewMockRepositoryInterface(ctrl)
@@ -25,8 +27,8 @@ func TestPostService_CreatePost(t *testing.T) {
 
 		mockRepository.EXPECT().CreatePost(gomock.Any()).Return(nil)
 
-		postService := services.NewPostService(zap.NewNop(), mockRepository)
-		err := postService.CreatePost(context.Background(), &post)
+		postService := services.NewPostService(zap.NewNop(), conf, mockRepository)
+		_, err := postService.CreatePost(context.Background(), &post)
 		assert.Nil(t, err)
 	})
 
@@ -39,8 +41,8 @@ func TestPostService_CreatePost(t *testing.T) {
 
 		mockRepository.EXPECT().CreatePost(gomock.Any()).Return(errors.New("dummy error"))
 
-		postService := services.NewPostService(zap.NewNop(), mockRepository)
-		err := postService.CreatePost(context.Background(), &post)
-		assert.Nil(t, err)
+		postService := services.NewPostService(zap.NewNop(), conf, mockRepository)
+		_, err := postService.CreatePost(context.Background(), &post)
+		assert.NotNil(t, err)
 	})
 }

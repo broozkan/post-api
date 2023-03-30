@@ -18,8 +18,13 @@ func TestConfig_New(t *testing.T) {
 		actualConfig, _ := config.New(configPath, configName)
 
 		expectedConfig := &config.Config{
-			AppName: "something-special",
-			Server:  config.Server{Port: "1111"},
+			AppName:        "something-special",
+			Server:         config.Server{Port: "1111"},
+			AdsEnabled:     false,
+			AdsFrequency:   3,
+			ItemPerPage:    27,
+			AuthorPrefix:   "t2",
+			AuthorIDLength: 8,
 		}
 
 		assert.Equal(t, expectedConfig, actualConfig)

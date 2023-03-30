@@ -14,7 +14,7 @@ import (
 
 type (
 	PostServiceInterface interface {
-		CreatePost(ctx context.Context, post *models.Post) error
+		CreatePost(ctx context.Context, post *models.Post) (*models.Post, error)
 	}
 
 	PostHandler struct {
@@ -52,7 +52,8 @@ func (h *PostHandler) CreatePostHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.postService.CreatePost(c.Context(), post); err != nil {
+	post, err := h.postService.CreatePost(c.Context(), post)
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "failed to create post",
 		})

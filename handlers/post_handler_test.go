@@ -40,7 +40,7 @@ func TestPostHandler_CreatePostHandlerHandler(t *testing.T) {
 		_ = faker.FakeData(&post)
 		post.Link = testURL
 		post.Content = "" // to prevent both content and link error
-		mockService.EXPECT().CreatePost(gomock.Any(), gomock.Any()).Return(nil)
+		mockService.EXPECT().CreatePost(gomock.Any(), gomock.Any()).Return(&post, nil)
 
 		bodyBytes, _ := json.Marshal(&post)
 		req := httptest.NewRequest(http.MethodPost, "/posts", bytes.NewBuffer(bodyBytes))
@@ -74,7 +74,7 @@ func TestPostHandler_CreatePostHandlerHandler(t *testing.T) {
 		post.Author = "t2_11qnzrqv"
 		post.Content = "" // to prevent both content and link error
 
-		mockService.EXPECT().CreatePost(gomock.Any(), &post).Return(errors.New("dummy error"))
+		mockService.EXPECT().CreatePost(gomock.Any(), &post).Return(nil, errors.New("dummy error"))
 
 		bodyBytes, _ := json.Marshal(&post)
 		req := httptest.NewRequest(http.MethodPost, "/posts", bytes.NewBuffer(bodyBytes))
