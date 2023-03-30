@@ -19,7 +19,9 @@ func main() {
 func run() error {
 	appEnv := os.Getenv("APP_ENV")
 	logger, _ := zap.NewProduction()
-	defer logger.Sync()
+	defer func() {
+		_ = logger.Sync()
+	}()
 	conf, err := config.New("../.config", appEnv)
 	if err != nil {
 		return err
