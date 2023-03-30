@@ -3,6 +3,8 @@ module broozkan/postapi
 go 1.20
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
+	github.com/go-faker/faker/v4 v4.1.0
 	github.com/gofiber/fiber/v2 v2.43.0
 	github.com/golang/mock v1.4.4
 	github.com/spf13/viper v1.15.0
@@ -14,7 +16,6 @@ require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/go-faker/faker/v4 v4.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/klauspost/compress v1.16.3 // indirect
