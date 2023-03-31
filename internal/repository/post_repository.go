@@ -20,5 +20,11 @@ func NewPostRepository(conf *config.Couchbase, bucket *gocb.Bucket) *PostReposit
 }
 
 func (r *PostRepository) CreatePost(post *models.Post) error {
-	panic("implement me!")
+	_, err := r.bucket.Collection(r.conf.PostCollection).Insert(post.ID, post, &gocb.InsertOptions{
+		Expiry: 0,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
