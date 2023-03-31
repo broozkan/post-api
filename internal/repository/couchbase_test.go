@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"strings"
 	"testing"
 	"time"
 
@@ -32,8 +33,14 @@ func (s *CouchbaseTestSuite) SetupSuite() {
 	port, err := nat.NewPort("tcp", "8091")
 	assert.Nil(s.T(), err)
 
+	image := "couchbase/server:7.0.2"
+
+	if isArmProcessor() {
+		image = "couchbase/server:community-aarch64"
+	}
+
 	req := testcontainers.ContainerRequest{
-		Image: "couchbase/server:community-aarch64",
+		Image: image,
 		ExposedPorts: []string{
 			"8091:8091/tcp",
 			"8092:8092/tcp",
@@ -218,4 +225,12 @@ func (s *CouchbaseTestSuite) TestCouchbase() {
 		assert.NotNil(s.T(), err)
 		assert.Nil(s.T(), cb)
 	})
+}
+
+func isArmProcessor() bool {
+	out, err := exec.Command("uname", "-m").Output()
+	if err != nil {
+		return false
+	}
+	return strings.TrimSpace(string(out)) == "arm64"
 }
