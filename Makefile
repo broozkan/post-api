@@ -4,7 +4,7 @@ code-coverage:
 	echo `go tool cover -func cover.out | grep total`
 
 db-test:
-	go clean -testcache && go test ./internal/couchbase -run TestCouchbase -v
+	go clean -testcache && go test ./internal/repository -run TestCouchbase -v
 
 unit-test:
 	go clean --testcache && go test ./... -short

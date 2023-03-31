@@ -3,6 +3,14 @@ package models
 import "time"
 
 type (
+	PostRow struct {
+		Post Post `json:"postData"`
+	}
+
+	CountResult struct {
+		Count int `json:"count"`
+	}
+
 	Post struct {
 		ID        string `json:"id"`
 		Title     string `json:"title"`

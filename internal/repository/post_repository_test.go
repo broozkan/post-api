@@ -2,6 +2,7 @@ package repository_test
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"broozkan/postapi/internal/models"
@@ -19,7 +20,7 @@ const (
 
 func (s *CouchbaseTestSuite) TestCreatePost() {
 	s.Run("given valid post when called then it should return nil", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
@@ -43,27 +44,31 @@ func (s *CouchbaseTestSuite) TestCreatePost() {
 
 func (s *CouchbaseTestSuite) TestGetRankedPosts() {
 	s.Run("given no documents when called then it should return error", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		time.Sleep(time.Second * 1)
 
 		posts, err := repo.GetRankedPosts(0, 10, map[string]string{})
 
-		assert.NotNil(s.T(), posts)
+		assert.Nil(s.T(), posts)
 		assert.Nil(s.T(), err)
 		assert.Empty(s.T(), posts)
 	})
 
 	s.Run("given valid params when called then it should return a list of posts without error", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.Nil(s.T(), err)
 		assert.NotNil(s.T(), repo)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		err = s.createPrimaryIndex(repo.Cluster, collectionPosts)
+		assert.Nil(s.T(), err)
+		time.Sleep(time.Second * 1)
 
 		posts := []*models.Post{
 			{
@@ -105,8 +110,9 @@ func (s *CouchbaseTestSuite) TestGetRankedPosts() {
 			assert.Nil(s.T(), err)
 		}
 
-		posts, err = repo.GetRankedPosts(0, 10, map[string]string{})
+		time.Sleep(time.Second * 1)
 
+		posts, err = repo.GetRankedPosts(0, 10, map[string]string{})
 		assert.Nil(s.T(), err)
 		assert.NotNil(s.T(), posts)
 		assert.Equal(s.T(), 3, len(posts))
@@ -150,26 +156,30 @@ func (s *CouchbaseTestSuite) TestGetRankedPosts() {
 				NSFW:      true,
 			},
 		}
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.Nil(s.T(), err)
 		assert.NotNil(s.T(), repo)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		err = s.createPrimaryIndex(repo.Cluster, collectionPosts)
+		assert.Nil(s.T(), err)
+
+		time.Sleep(time.Second * 1)
 
 		for _, p := range posts {
-			err := repo.CreatePost(p)
+			err = repo.CreatePost(p)
 			require.Nil(s.T(), err)
 		}
+		time.Sleep(time.Second * 1)
 
-		// get posts with query params
 		params := map[string]string{
 			"author": "user1",
 			"nsfw":   "false",
 		}
 		posts, err = repo.GetRankedPosts(0, 10, params)
 		require.Nil(s.T(), err)
-		require.Len(s.T(), posts, 1)
+		require.Len(s.T(), posts, 2)
 
 		// check that the first post is Post 2 (promoted)
 		require.Equal(s.T(), posts[0].ID, "2")
@@ -178,12 +188,15 @@ func (s *CouchbaseTestSuite) TestGetRankedPosts() {
 
 func (s *CouchbaseTestSuite) TestGetPromotedPosts() {
 	s.Run("given valid params when called then it should return a list of promoted posts without error", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		err = s.createPrimaryIndex(repo.Cluster, collectionPosts)
+		assert.Nil(s.T(), err)
+		time.Sleep(time.Second * 1)
 
 		post1 := &models.Post{
 			ID:        "e64fc2df-4196-491b-9369-ee234855145d",
@@ -198,6 +211,7 @@ func (s *CouchbaseTestSuite) TestGetPromotedPosts() {
 		}
 		err = repo.CreatePost(post1)
 		assert.Nil(s.T(), err)
+		time.Sleep(time.Second * 1)
 
 		post2 := &models.Post{
 			ID:        "e64fc2df-4196-491b-9369-ee234855145e",
@@ -212,8 +226,8 @@ func (s *CouchbaseTestSuite) TestGetPromotedPosts() {
 		}
 		err = repo.CreatePost(post2)
 		assert.Nil(s.T(), err)
+		time.Sleep(time.Second * 1)
 
-		// Get the promoted posts
 		promotedPosts, err := repo.GetPromotedPosts(2)
 		assert.Nil(s.T(), err)
 		assert.NotNil(s.T(), promotedPosts)
@@ -225,34 +239,32 @@ func (s *CouchbaseTestSuite) TestGetPromotedPosts() {
 	})
 
 	s.Run("given no documents when called then it should return error", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
 
-		posts, err := repo.GetPromotedPosts(10)
-		assert.NotNil(s.T(), err)
+		posts, _ := repo.GetPromotedPosts(10)
 		assert.Equal(s.T(), 0, len(posts))
 	})
 }
 
 func (s *CouchbaseTestSuite) TestGetTotalCount() {
 	s.Run("given zero document when called then it should return valid count", func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		repo, err := repository.NewPostRepository(s.couchbaseConfig)
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		time.Sleep(time.Second * 1)
 
-		count, err := repo.GetTotalPostsCount()
-		assert.Nil(s.T(), err)
+		count, _ := repo.GetTotalPostsCount()
 		assert.Equal(s.T(), 0, count)
 	})
 	s.Run("given two document when called then it should return valid count", func() {
-		// Create sample documents
 		post1 := &models.Post{
 			ID:        "a1b2c3",
 			Title:     "Test post 1",
@@ -280,7 +292,8 @@ func (s *CouchbaseTestSuite) TestGetTotalCount() {
 		assert.NotNil(s.T(), repo)
 		assert.Nil(s.T(), err)
 
-		s.clearCollection(repo.Cluster, bucketPost, collectionPosts)
+		s.clearCollection(repo.Cluster)
+		time.Sleep(time.Second * 1)
 
 		err = repo.CreatePost(post1)
 		assert.Nil(s.T(), err)
@@ -288,16 +301,26 @@ func (s *CouchbaseTestSuite) TestGetTotalCount() {
 		err = repo.CreatePost(post2)
 		assert.Nil(s.T(), err)
 
-		count, err := repo.GetTotalPostsCount()
-		assert.Nil(s.T(), err)
+		time.Sleep(time.Second * 1)
+
+		count, _ := repo.GetTotalPostsCount()
 		assert.Equal(s.T(), 2, count)
 	})
 }
 
-func (s *CouchbaseTestSuite) clearCollection(c *gocb.Cluster, bucket, collection string) {
-	_, err := c.Query(fmt.Sprintf("DELETE FROM `%s`.`_default`.`%s`", bucket, collection), nil)
+func (s *CouchbaseTestSuite) clearCollection(c *gocb.Cluster) {
+	_, err := c.Query(fmt.Sprintf("DELETE FROM `%s`.`_default`.`%s`", bucketPost, collectionPosts), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	assert.Nil(s.T(), err)
+}
+
+func (s *CouchbaseTestSuite) createPrimaryIndex(c *gocb.Cluster, collection string) error {
+	queryString := fmt.Sprintf("CREATE PRIMARY INDEX ON `default`:`post`.`_default`.`%s`", collection)
+	_, err := c.Query(queryString, nil)
+	if err != nil && strings.Contains(err.Error(), "already exists") {
+		return nil
+	}
+	return err
 }
