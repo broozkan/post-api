@@ -15,6 +15,7 @@ import (
 type (
 	PostServiceInterface interface {
 		CreatePost(ctx context.Context, post *models.Post) (*models.Post, error)
+		GetPostsWithFilters(offset, limit int, params map[string]string) (*models.ListPostsResponse, error)
 	}
 
 	PostHandler struct {
@@ -36,6 +37,7 @@ func NewPostHandler(logger *zap.Logger, conf *config.Config, postService PostSer
 
 func (h *PostHandler) RegisterRoutes(app *fiber.App) {
 	app.Post("/posts", h.CreatePostHandler)
+	app.Get("/posts/feed", h.GetFeedHandler)
 }
 
 func (h *PostHandler) CreatePostHandler(c *fiber.Ctx) error {
@@ -60,6 +62,10 @@ func (h *PostHandler) CreatePostHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(post)
+}
+
+func (h *PostHandler) GetFeedHandler(c *fiber.Ctx) error {
+	panic("implement me!")
 }
 
 func validatePost(post *models.Post) error {

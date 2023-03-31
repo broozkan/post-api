@@ -46,6 +46,10 @@ func (s *PostService) CreatePost(_ context.Context, post *models.Post) (*models.
 	return post, nil
 }
 
+func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]string) (*models.ListPostsResponse, error) {
+	panic("implement me!")
+}
+
 func randomString(n int) string {
 	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
 	result := make([]byte, n)

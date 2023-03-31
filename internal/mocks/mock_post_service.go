@@ -49,3 +49,18 @@ func (mr *MockPostServiceInterfaceMockRecorder) CreatePost(arg0, arg1 interface{
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostServiceInterface)(nil).CreatePost), arg0, arg1)
 }
+
+// GetPostsWithFilters mocks base method.
+func (m *MockPostServiceInterface) GetPostsWithFilters(arg0, arg1 int, arg2 map[string]string) (*models.ListPostsResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPostsWithFilters", arg0, arg1, arg2)
+	ret0, _ := ret[0].(*models.ListPostsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPostsWithFilters indicates an expected call of GetPostsWithFilters.
+func (mr *MockPostServiceInterfaceMockRecorder) GetPostsWithFilters(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPostsWithFilters", reflect.TypeOf((*MockPostServiceInterface)(nil).GetPostsWithFilters), arg0, arg1, arg2)
+}
