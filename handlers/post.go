@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"net/url"
 	"strings"
 
 	"broozkan/postapi/internal/models"
@@ -11,9 +12,19 @@ import (
 
 func parseQueryStringParams(queryParams []byte) map[string]string {
 	filterMap := make(map[string]string)
-	for _, param := range queryParams {
-		kv := strings.Split(string(param), "=")
-		filterMap[kv[0]] = kv[1]
+	params := string(queryParams)
+	kvPairs := strings.Split(params, "&")
+	for _, kv := range kvPairs {
+		parts := strings.Split(kv, "=")
+		if len(parts) != 2 {
+			continue
+		}
+		key := parts[0]
+		value, err := url.QueryUnescape(parts[1])
+		if err != nil {
+			continue
+		}
+		filterMap[key] = value
 	}
 	return filterMap
 }

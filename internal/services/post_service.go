@@ -60,12 +60,14 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 			s.logger.Error("unable to get promoted posts", zap.Error(err)) // keep program running
 		}
 
-		adIndices := prepareIndices(posts, s.conf.AdsPositions)
-		for _, idx := range adIndices {
-			promotedPost := promotedPosts[generateRandomNumber(int64(len(promotedPosts)))]
-			posts, err = addPromotedPost(posts, promotedPost, idx)
-			if err != nil {
-				return nil, err
+		if len(promotedPosts) != 0 {
+			adIndices := prepareIndices(posts, s.conf.AdsPositions)
+			for _, idx := range adIndices {
+				promotedPost := promotedPosts[generateRandomNumber(int64(len(promotedPosts)))]
+				posts, err = addPromotedPost(posts, promotedPost, idx)
+				if err != nil {
+					return nil, err
+				}
 			}
 		}
 	}

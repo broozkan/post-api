@@ -1,7 +1,7 @@
 appname: something-special
 server:
   port: 1111
-adsEnabled:     false
+adsEnabled: false
 adsPositions:
   3: 2
   17: 16
