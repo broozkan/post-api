@@ -25,6 +25,13 @@ func TestConfig_New(t *testing.T) {
 			ItemPerPage:    27,
 			AuthorPrefix:   "t2",
 			AuthorIDLength: 8,
+			Couchbase: config.Couchbase{
+				ConnectionString: "connection-string",
+				Username:         "username",
+				Password:         "password",
+				BucketName:       "bucket",
+				PostCollection:   "posts",
+			},
 		}
 
 		assert.Equal(t, expectedConfig, actualConfig)

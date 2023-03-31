@@ -13,7 +13,17 @@ type (
 		ItemPerPage    int
 		AuthorPrefix   string
 		AuthorIDLength int
+		Couchbase      Couchbase
 	}
+
+	Couchbase struct {
+		ConnectionString string
+		Username         string
+		Password         string
+		BucketName       string
+		PostCollection   string
+	}
+
 	Server struct {
 		Port string
 	}

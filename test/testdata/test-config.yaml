@@ -6,3 +6,9 @@ adsFrequency:   3
 itemPerPage:    27
 authorPrefix:   "t2"
 authorIDLength: 8
+couchbase:
+  connectionString: "connection-string"
+  username: "username"
+  password: "password"
+  bucketName: "bucket"
+  postCollection: "posts"
