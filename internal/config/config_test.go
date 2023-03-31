@@ -26,11 +26,24 @@ func TestConfig_New(t *testing.T) {
 			AuthorPrefix:   "t2",
 			AuthorIDLength: 8,
 			Couchbase: config.Couchbase{
-				ConnectionString: "connection-string",
-				Username:         "username",
-				Password:         "password",
-				BucketName:       "bucket",
-				PostCollection:   "posts",
+				URL:      "url",
+				Username: "username",
+				Password: "password",
+				Buckets: []config.BucketConfig{
+					{
+						Name:               "post",
+						CreatePrimaryIndex: false,
+						Scopes: []config.ScopeConfig{{
+							Name: "",
+							Collections: []config.CollectionConfig{
+								{
+									Name:               "posts",
+									CreatePrimaryIndex: true,
+								},
+							},
+						}},
+					},
+				},
 			},
 		}
 

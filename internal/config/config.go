@@ -16,14 +16,6 @@ type (
 		Couchbase      Couchbase
 	}
 
-	Couchbase struct {
-		ConnectionString string
-		Username         string
-		Password         string
-		BucketName       string
-		PostCollection   string
-	}
-
 	Server struct {
 		Port string
 	}

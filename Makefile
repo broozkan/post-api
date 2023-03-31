@@ -1,3 +1,6 @@
+db-test:
+	go clean -testcache && go test ./internal/couchbase -run TestCouchbase -v
+
 unit-test:
 	go clean --testcache && go test ./... -short
 
