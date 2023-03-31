@@ -1,3 +1,8 @@
+code-coverage:
+	go test `go list ./... | grep -vE "/tilt_modules|/metrics|/contract|/mocks|/repository"` -coverprofile cover.out
+	go tool cover -html=cover.out -o coverage.html
+	echo `go tool cover -func cover.out | grep total`
+
 db-test:
 	go clean -testcache && go test ./internal/couchbase -run TestCouchbase -v
 

@@ -1,4 +1,4 @@
-package couchbase
+package repository
 
 import (
 	"errors"

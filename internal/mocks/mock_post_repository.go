@@ -49,18 +49,18 @@ func (mr *MockRepositoryInterfaceMockRecorder) CreatePost(arg0 interface{}) *gom
 }
 
 // GetPromotedPosts mocks base method.
-func (m *MockRepositoryInterface) GetPromotedPosts() ([]*models.Post, error) {
+func (m *MockRepositoryInterface) GetPromotedPosts(arg0 int) ([]*models.Post, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPromotedPosts")
+	ret := m.ctrl.Call(m, "GetPromotedPosts", arg0)
 	ret0, _ := ret[0].([]*models.Post)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPromotedPosts indicates an expected call of GetPromotedPosts.
-func (mr *MockRepositoryInterfaceMockRecorder) GetPromotedPosts() *gomock.Call {
+func (mr *MockRepositoryInterfaceMockRecorder) GetPromotedPosts(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPromotedPosts", reflect.TypeOf((*MockRepositoryInterface)(nil).GetPromotedPosts))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPromotedPosts", reflect.TypeOf((*MockRepositoryInterface)(nil).GetPromotedPosts), arg0)
 }
 
 // GetRankedPosts mocks base method.

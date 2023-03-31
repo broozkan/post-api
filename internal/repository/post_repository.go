@@ -1,4 +1,4 @@
-package couchbase
+package repository
 
 import (
 	"broozkan/postapi/internal/config"
@@ -19,4 +19,16 @@ func (c *Couchbase) CreatePost(post *models.Post) error {
 		return err
 	}
 	return nil
+}
+
+func (c *Couchbase) GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error) {
+	panic("implement me!")
+}
+
+func (c *Couchbase) GetPromotedPosts(count int) ([]*models.Post, error) {
+	panic("implement me!")
+}
+
+func (c *Couchbase) GetTotalPostsCount() (int, error) {
+	panic("implement me!")
 }

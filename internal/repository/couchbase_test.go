@@ -1,4 +1,4 @@
-package couchbase_test
+package repository_test
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"broozkan/postapi/internal/config"
-	"broozkan/postapi/internal/couchbase"
+	"broozkan/postapi/internal/repository"
 
 	"github.com/docker/go-connections/nat"
 	"github.com/stretchr/testify/assert"
@@ -178,7 +178,7 @@ func (s *CouchbaseTestSuite) TestCouchbase() {
 				},
 			},
 		}
-		cb, err := couchbase.New(cbConfig)
+		cb, err := repository.New(cbConfig)
 
 		assert.Nil(s.T(), err)
 		assert.NotNil(s.T(), cb)
@@ -195,7 +195,7 @@ func (s *CouchbaseTestSuite) TestCouchbase() {
 			Buckets:  []config.BucketConfig{},
 		}
 
-		cb, err := couchbase.New(&cbConfig)
+		cb, err := repository.New(&cbConfig)
 
 		assert.Nil(s.T(), cb)
 		assert.NotNil(s.T(), err)
@@ -213,7 +213,7 @@ func (s *CouchbaseTestSuite) TestCouchbase() {
 			},
 		}
 
-		cb, err := couchbase.New(cbConfig)
+		cb, err := repository.New(cbConfig)
 
 		assert.NotNil(s.T(), err)
 		assert.Nil(s.T(), cb)

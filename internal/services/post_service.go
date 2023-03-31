@@ -15,7 +15,7 @@ type (
 	RepositoryInterface interface {
 		CreatePost(post *models.Post) error
 		GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error)
-		GetPromotedPosts() ([]*models.Post, error)
+		GetPromotedPosts(count int) ([]*models.Post, error)
 		GetTotalPostsCount() (int, error)
 	}
 
@@ -55,7 +55,7 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 
 	if len(posts) >= 3 && s.conf.AdsEnabled {
 		var promotedPosts []*models.Post
-		promotedPosts, err = s.repository.GetPromotedPosts()
+		promotedPosts, err = s.repository.GetPromotedPosts(len(s.conf.AdsPositions))
 		if err != nil {
 			s.logger.Error("unable to get promoted posts", zap.Error(err)) // keep program running
 		}

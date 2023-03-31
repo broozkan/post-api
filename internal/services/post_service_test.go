@@ -148,7 +148,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 			TotalPages: 4,
 		}
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
-		mocksRepository.EXPECT().GetPromotedPosts().Return(promotedPosts, nil)
+		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(promotedPosts, nil)
 		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
@@ -196,7 +196,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		}
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
-		mocksRepository.EXPECT().GetPromotedPosts().Return(nil, errors.New("dummy error"))
+		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(nil, errors.New("dummy error"))
 		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
@@ -224,7 +224,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		conf := &config.Config{AdsEnabled: true}
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
-		mocksRepository.EXPECT().GetPromotedPosts().Return(promotedPosts, nil)
+		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(promotedPosts, nil)
 		mocksRepository.EXPECT().GetTotalPostsCount().Return(0, errors.New("dummy error"))
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
