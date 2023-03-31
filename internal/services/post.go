@@ -1,16 +1,33 @@
 package services
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"fmt"
+	"math/big"
 
 	"broozkan/postapi/internal/models"
 )
+
+func addPromotedPost(posts []*models.Post, promoted *models.Post, index int) ([]*models.Post, error) {
+	if index > len(posts) {
+		return nil, fmt.Errorf("invalid index %d, posts has length %d", index, len(posts))
+	}
+
+	if index == 0 {
+		return append([]*models.Post{promoted}, posts...), nil
+	}
+
+	newPosts := append([]*models.Post{}, posts[:index]...)
+	newPosts = append(newPosts, promoted)
+	newPosts = append(newPosts, posts[index:]...)
+	return newPosts, nil
+}
 
 func randomString(n int) string {
 	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
 	result := make([]byte, n)
 	for i := range result {
-		result[i] = letters[rand.Intn(len(letters))]
+		result[i] = letters[generateRandomNumber(int64(len(letters)))]
 	}
 	return string(result)
 }
@@ -23,4 +40,12 @@ func prepareIndices(posts []*models.Post, adPositions map[int]int) []int {
 		}
 	}
 	return adIndices
+}
+
+func generateRandomNumber(l int64) int64 {
+	nBig, err := rand.Int(rand.Reader, big.NewInt(l))
+	if err != nil {
+		panic(err)
+	}
+	return nBig.Int64()
 }

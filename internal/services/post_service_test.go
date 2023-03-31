@@ -49,12 +49,13 @@ func TestPostService_CreatePost(t *testing.T) {
 }
 
 func TestPostService_GetPostsWithFilters(t *testing.T) {
-	t.Run("given ads are enabled and post length greater than 3 when all dependecies ok then it should return nil", func(t *testing.T) {
+	t.Run("given ads are enabled and post length greater than 3 when all dependecies ok "+
+		"then it should return nil and should return correct response", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		mocksRepository := mocks.NewMockRepositoryInterface(ctrl)
 		rankedPosts := generatePosts(5)
 		promotedPosts := []*models.Post{
-			&models.Post{
+			{
 				ID:        "3",
 				Title:     "Promoted Post 1",
 				Author:    "t2_promoted",
@@ -66,22 +67,104 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 				NSFW:      false,
 			},
 		}
-		conf := &config.Config{AdsEnabled: true}
-
+		conf := &config.Config{
+			AdsEnabled: true,
+			AdsPositions: map[int]int{
+				3:  1,
+				17: 16,
+			},
+			ItemPerPage: 25,
+		}
+		expectedResponse := &models.ListPostsResponse{
+			Posts: []*models.Post{
+				{
+					ID:        "1",
+					Title:     "Post 1",
+					Author:    "t2_user123",
+					Link:      "https://example.com/post1",
+					Subreddit: "testsubreddit",
+					Content:   "",
+					Score:     1,
+					Promoted:  false,
+					NSFW:      false,
+				},
+				{
+					ID:        "3",
+					Title:     "Promoted Post 1",
+					Author:    "t2_promoted",
+					Link:      "https://example.com/promoted1",
+					Subreddit: "testpromoted",
+					Content:   "",
+					Score:     0,
+					Promoted:  false,
+					NSFW:      false,
+				},
+				{
+					ID:        "2",
+					Title:     "Post 2",
+					Author:    "t2_user123",
+					Link:      "https://example.com/post2",
+					Subreddit: "testsubreddit",
+					Content:   "",
+					Score:     2,
+					Promoted:  false,
+					NSFW:      false,
+				},
+				{
+					ID:        "3",
+					Title:     "Post 3",
+					Author:    "t2_user123",
+					Link:      "https://example.com/post3",
+					Subreddit: "testsubreddit",
+					Content:   "",
+					Score:     3,
+					Promoted:  false,
+					NSFW:      false,
+				},
+				{
+					ID:        "4",
+					Title:     "Post 4",
+					Author:    "t2_user123",
+					Link:      "https://example.com/post4",
+					Subreddit: "testsubreddit",
+					Content:   "",
+					Score:     4,
+					Promoted:  false,
+					NSFW:      false,
+				},
+				{
+					ID:        "5",
+					Title:     "Post 5",
+					Author:    "t2_user123",
+					Link:      "https://example.com/post5",
+					Subreddit: "testsubreddit",
+					Content:   "",
+					Score:     5,
+					Promoted:  false,
+					NSFW:      false,
+				},
+			},
+			Page:       1,
+			TotalPages: 4,
+		}
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetPromotedPosts().Return(promotedPosts, nil)
 		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
-		_, err := postService.GetPostsWithFilters(0, 25, nil)
+		actualResponse, err := postService.GetPostsWithFilters(0, 25, nil)
 		assert.Nil(t, err)
+		assert.Equal(t, expectedResponse, actualResponse)
 	})
 
 	t.Run("given ads are disabled when all dependecies ok then it should return nil", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		mocksRepository := mocks.NewMockRepositoryInterface(ctrl)
-		rankedPosts := generatePosts(5)
-		conf := &config.Config{AdsEnabled: true}
+		rankedPosts := generatePosts(4)
+		conf := &config.Config{
+			AdsEnabled:  false,
+			ItemPerPage: 25,
+		}
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
@@ -106,8 +189,11 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 	t.Run("given ads are enabled when unable to get promoted posts then it should return nil", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		mocksRepository := mocks.NewMockRepositoryInterface(ctrl)
-		rankedPosts := generatePosts(5)
-		conf := &config.Config{AdsEnabled: true}
+		rankedPosts := generatePosts(4)
+		conf := &config.Config{
+			AdsEnabled:  true,
+			ItemPerPage: 25,
+		}
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetPromotedPosts().Return(nil, errors.New("dummy error"))
@@ -123,7 +209,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		mocksRepository := mocks.NewMockRepositoryInterface(ctrl)
 		rankedPosts := generatePosts(5)
 		promotedPosts := []*models.Post{
-			&models.Post{
+			{
 				ID:        "3",
 				Title:     "Promoted Post 1",
 				Author:    "t2_promoted",

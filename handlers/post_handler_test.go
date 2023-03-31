@@ -117,7 +117,7 @@ func TestPostHandler_GetFeedHandler(t *testing.T) {
 		handler.RegisterRoutes(app)
 
 		posts := []*models.Post{
-			&models.Post{
+			{
 				ID:        "1",
 				Title:     "Post 1",
 				Author:    "t2_user123",
@@ -128,7 +128,7 @@ func TestPostHandler_GetFeedHandler(t *testing.T) {
 				Promoted:  false,
 				NSFW:      false,
 			},
-			&models.Post{
+			{
 				ID:        "2",
 				Title:     "Post 2",
 				Author:    "t2_user456",

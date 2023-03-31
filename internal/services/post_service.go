@@ -48,5 +48,39 @@ func (s *PostService) CreatePost(_ context.Context, post *models.Post) (*models.
 }
 
 func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]string) (*models.ListPostsResponse, error) {
-	panic("implement me!")
+	posts, err := s.repository.GetRankedPosts(offset, limit, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(posts) >= 3 && s.conf.AdsEnabled {
+		var promotedPosts []*models.Post
+		promotedPosts, err = s.repository.GetPromotedPosts()
+		if err != nil {
+			s.logger.Error("unable to get promoted posts", zap.Error(err)) // keep program running
+		}
+
+		adIndices := prepareIndices(posts, s.conf.AdsPositions)
+		for _, idx := range adIndices {
+			promotedPost := promotedPosts[generateRandomNumber(int64(len(promotedPosts)))]
+			posts, err = addPromotedPost(posts, promotedPost, idx)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	totalCount, err := s.repository.GetTotalPostsCount()
+	if err != nil {
+		return nil, err
+	}
+
+	totalPages := (totalCount + limit - 1) / limit
+	response := &models.ListPostsResponse{
+		Posts:      posts,
+		Page:       offset/s.conf.ItemPerPage + 1,
+		TotalPages: totalPages,
+	}
+
+	return response, nil
 }
