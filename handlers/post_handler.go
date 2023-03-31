@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"context"
-	"errors"
+	"net/http"
+	"strconv"
 
 	"broozkan/postapi/internal/config"
 	"broozkan/postapi/internal/models"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
 )
@@ -22,7 +22,6 @@ type (
 		logger      *zap.Logger
 		postService PostServiceInterface
 		config      *config.Config
-		nsfwPosts   map[int]bool
 	}
 )
 
@@ -31,7 +30,6 @@ func NewPostHandler(logger *zap.Logger, conf *config.Config, postService PostSer
 		logger:      logger,
 		postService: postService,
 		config:      conf,
-		nsfwPosts:   nil,
 	}
 }
 
@@ -65,18 +63,23 @@ func (h *PostHandler) CreatePostHandler(c *fiber.Ctx) error {
 }
 
 func (h *PostHandler) GetFeedHandler(c *fiber.Ctx) error {
-	panic("implement me!")
-}
+	h.logger.Debug("GetFeed request arrived")
 
-func validatePost(post *models.Post) error {
-	if post.Title == "" {
-		return errors.New("title is required")
+	pageStr := c.Query("page", "1")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		return c.Status(http.StatusBadRequest).JSON(&models.ErrorHandler{Message: "Invalid page number"})
 	}
-	if post.Link != "" && !govalidator.IsURL(post.Link) {
-		return errors.New("invalid link")
+
+	offset := (page - 1) * h.config.ItemPerPage
+	limit := h.config.ItemPerPage
+
+	filterMap := parseQueryStringParams(c.Request().URI().QueryString())
+
+	response, err := h.postService.GetPostsWithFilters(offset, limit, filterMap)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(&models.ErrorHandler{Message: "Failed to list posts"})
 	}
-	if post.Link != "" && post.Content != "" {
-		return errors.New("a post cannot have both a link and content populated")
-	}
-	return nil
+
+	return c.Status(http.StatusOK).JSON(response)
 }

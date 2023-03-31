@@ -9,7 +9,7 @@ type (
 		AppName        string
 		Server         Server
 		AdsEnabled     bool
-		AdsFrequency   int
+		AdsPositions   map[int]int
 		ItemPerPage    int
 		AuthorPrefix   string
 		AuthorIDLength int

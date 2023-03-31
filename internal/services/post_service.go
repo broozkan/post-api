@@ -2,8 +2,6 @@ package services
 
 import (
 	"context"
-	"crypto/rand"
-	"math/big"
 
 	"broozkan/postapi/handlers"
 	"broozkan/postapi/internal/config"
@@ -16,6 +14,9 @@ import (
 type (
 	RepositoryInterface interface {
 		CreatePost(post *models.Post) error
+		GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error)
+		GetPromotedPosts() ([]*models.Post, error)
+		GetTotalPostsCount() (int, error)
 	}
 
 	PostService struct {
@@ -48,17 +49,4 @@ func (s *PostService) CreatePost(_ context.Context, post *models.Post) (*models.
 
 func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]string) (*models.ListPostsResponse, error) {
 	panic("implement me!")
-}
-
-func randomString(n int) string {
-	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
-	result := make([]byte, n)
-	for i := range result {
-		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(letters))))
-		if err != nil {
-			panic(err)
-		}
-		result[i] = letters[n.Int64()]
-	}
-	return string(result)
 }

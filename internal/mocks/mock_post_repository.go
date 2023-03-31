@@ -47,3 +47,48 @@ func (mr *MockRepositoryInterfaceMockRecorder) CreatePost(arg0 interface{}) *gom
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockRepositoryInterface)(nil).CreatePost), arg0)
 }
+
+// GetPromotedPosts mocks base method.
+func (m *MockRepositoryInterface) GetPromotedPosts() ([]*models.Post, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPromotedPosts")
+	ret0, _ := ret[0].([]*models.Post)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPromotedPosts indicates an expected call of GetPromotedPosts.
+func (mr *MockRepositoryInterfaceMockRecorder) GetPromotedPosts() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPromotedPosts", reflect.TypeOf((*MockRepositoryInterface)(nil).GetPromotedPosts))
+}
+
+// GetRankedPosts mocks base method.
+func (m *MockRepositoryInterface) GetRankedPosts(arg0, arg1 int, arg2 map[string]string) ([]*models.Post, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRankedPosts", arg0, arg1, arg2)
+	ret0, _ := ret[0].([]*models.Post)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRankedPosts indicates an expected call of GetRankedPosts.
+func (mr *MockRepositoryInterfaceMockRecorder) GetRankedPosts(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRankedPosts", reflect.TypeOf((*MockRepositoryInterface)(nil).GetRankedPosts), arg0, arg1, arg2)
+}
+
+// GetTotalPostsCount mocks base method.
+func (m *MockRepositoryInterface) GetTotalPostsCount() (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTotalPostsCount")
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTotalPostsCount indicates an expected call of GetTotalPostsCount.
+func (mr *MockRepositoryInterfaceMockRecorder) GetTotalPostsCount() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTotalPostsCount", reflect.TypeOf((*MockRepositoryInterface)(nil).GetTotalPostsCount))
+}

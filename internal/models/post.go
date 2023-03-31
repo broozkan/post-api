@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type (
 	Post struct {
 		ID        string `json:"id"`
@@ -14,8 +16,23 @@ type (
 	}
 
 	AdPlacement struct {
-		Index  int
-		PostID int
+		PostIndex   int
+		Position    string
+		Ad          *Ad
+		PreviousNSF bool
+	}
+
+	Ad struct {
+		ID           string    `json:"id"`
+		Post         *Post     `json:"post"`
+		Title        string    `json:"title"`
+		Link         string    `json:"link"`
+		ImageURL     string    `json:"image_url"`
+		TargetGeo    string    `json:"target_geo"`
+		TargetAgeMin int       `json:"target_age_min"`
+		TargetAgeMax int       `json:"target_age_max"`
+		CreatedAt    time.Time `json:"created_at"`
+		ExpiresAt    time.Time `json:"expires_at"`
 	}
 
 	ListPostsResponse struct {

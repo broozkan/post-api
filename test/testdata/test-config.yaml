@@ -2,7 +2,9 @@ appname: something-special
 server:
   port: 1111
 adsEnabled:     false
-adsFrequency:   3
+adsPositions:
+  3: 2
+  17: 16
 itemPerPage:    27
 authorPrefix:   "t2"
 authorIDLength: 8
