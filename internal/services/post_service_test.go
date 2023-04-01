@@ -69,7 +69,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		}
 		conf := &config.Config{
 			AdsEnabled: true,
-			AdsPositions: map[int]int{
+			PostLengthAdPositionMap: map[int]int{
 				3:  1,
 				17: 16,
 			},

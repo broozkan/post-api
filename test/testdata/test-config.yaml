@@ -3,7 +3,7 @@ server:
   port: 1111
 minPostLengthForAd: 3
 adsEnabled: false
-adsPositions:
+postLengthAdPositionMap:
   3: 2
   17: 16
 itemPerPage: 27

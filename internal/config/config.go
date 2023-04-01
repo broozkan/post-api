@@ -6,15 +6,15 @@ import (
 
 type (
 	Config struct {
-		AppName            string
-		Server             Server
-		AdsEnabled         bool
-		MinPostLengthForAd int
-		AdsPositions       map[int]int
-		ItemPerPage        int
-		AuthorPrefix       string
-		AuthorIDLength     int
-		Couchbase          Couchbase
+		AppName                 string
+		Server                  Server
+		AdsEnabled              bool
+		MinPostLengthForAd      int
+		PostLengthAdPositionMap map[int]int
+		ItemPerPage             int
+		AuthorPrefix            string
+		AuthorIDLength          int
+		Couchbase               Couchbase
 	}
 
 	Server struct {

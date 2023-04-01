@@ -12,9 +12,10 @@ import (
 )
 
 type Couchbase struct {
-	Cluster        *gocb.Cluster
-	PostBucket     *gocb.Bucket
-	PostCollection string
+	Cluster            *gocb.Cluster
+	PostBucket         *gocb.Bucket
+	PostBucketName     string
+	PostCollectionName string
 }
 
 const timeout = 20 * time.Second
@@ -59,9 +60,10 @@ func New(couchbaseConfig *config.Couchbase) (*Couchbase, error) {
 	}
 
 	c := &Couchbase{
-		Cluster:        cluster,
-		PostBucket:     bucketMap[couchbaseConfig.Buckets[0].Name],
-		PostCollection: couchbaseConfig.Buckets[0].Scopes[0].Collections[0].Name,
+		Cluster:            cluster,
+		PostBucket:         bucketMap[couchbaseConfig.Buckets[0].Name],
+		PostBucketName:     couchbaseConfig.Buckets[0].Name,
+		PostCollectionName: couchbaseConfig.Buckets[0].Scopes[0].Collections[0].Name,
 	}
 
 	err = c.createIndexIfNotExist("postIndex", "post", "id")

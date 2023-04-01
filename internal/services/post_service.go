@@ -55,13 +55,13 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 
 	if len(posts) >= s.conf.MinPostLengthForAd && s.conf.AdsEnabled {
 		var promotedPosts []*models.Post
-		promotedPosts, err = s.repository.GetPromotedPosts(len(s.conf.AdsPositions))
+		promotedPosts, err = s.repository.GetPromotedPosts(len(s.conf.PostLengthAdPositionMap))
 		if err != nil {
 			s.logger.Error("unable to get promoted posts", zap.Error(err)) // keep program running
 		}
 
 		if len(promotedPosts) != 0 {
-			adIndices := PrepareIndices(posts, s.conf.AdsPositions)
+			adIndices := PrepareIndices(posts, s.conf.PostLengthAdPositionMap)
 			for _, idx := range adIndices {
 				promotedPost := promotedPosts[generateRandomNumber(int64(len(promotedPosts)))]
 				posts, err = AddPromotedPost(posts, promotedPost, idx)

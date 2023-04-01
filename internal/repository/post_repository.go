@@ -15,7 +15,7 @@ func NewPostRepository(cbConfig *config.Couchbase) (*Couchbase, error) {
 }
 
 func (c *Couchbase) CreatePost(post *models.Post) error {
-	_, err := c.PostBucket.Collection(c.PostCollection).Insert(post.ID, post, &gocb.InsertOptions{
+	_, err := c.PostBucket.Collection(c.PostCollectionName).Insert(post.ID, post, &gocb.InsertOptions{
 		Expiry: 0,
 	})
 	if err != nil {
@@ -25,7 +25,7 @@ func (c *Couchbase) CreatePost(post *models.Post) error {
 }
 
 func (c *Couchbase) GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error) {
-	query := "SELECT * FROM `post`.`_default`.`posts` as postData WHERE `promoted`=false"
+	query := fmt.Sprintf("SELECT * FROM `%s`.`_default`.`%s` as postData WHERE `promoted`=false", c.PostBucketName, c.PostCollectionName)
 
 	if subreddit, ok := params["subreddit"]; ok {
 		query += fmt.Sprintf(" AND `subreddit` = '%s'", subreddit)
@@ -64,7 +64,7 @@ func (c *Couchbase) GetRankedPosts(offset, limit int, params map[string]string) 
 }
 
 func (c *Couchbase) GetPromotedPosts(count int) ([]*models.Post, error) {
-	query := fmt.Sprintf("SELECT * FROM `post`.`_default`.`posts` as postData WHERE `promoted` = true LIMIT %d", count)
+	query := fmt.Sprintf("SELECT * FROM `%s`.`_default`.`%s` as postData WHERE `promoted` = true LIMIT %d", c.PostBucketName, c.PostCollectionName, count)
 
 	result, err := c.Cluster.Query(query, &gocb.QueryOptions{Adhoc: true})
 	if err != nil {
@@ -85,7 +85,7 @@ func (c *Couchbase) GetPromotedPosts(count int) ([]*models.Post, error) {
 }
 
 func (c *Couchbase) GetTotalPostsCount() (int, error) {
-	query := "SELECT COUNT(*) as count FROM `post`.`_default`.`posts`"
+	query := fmt.Sprintf("SELECT COUNT(*) as count FROM `%s`.`_default`.`%s`", c.PostBucketName, c.PostCollectionName)
 
 	result, err := c.Cluster.Query(query, &gocb.QueryOptions{Adhoc: true})
 	if err != nil {

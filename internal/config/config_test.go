@@ -22,7 +22,7 @@ func TestConfig_New(t *testing.T) {
 			Server:             config.Server{Port: "1111"},
 			AdsEnabled:         false,
 			MinPostLengthForAd: 3,
-			AdsPositions: map[int]int{
+			PostLengthAdPositionMap: map[int]int{
 				3:  2,
 				17: 16,
 			},

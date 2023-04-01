@@ -2,7 +2,7 @@ appname: "post-api-dev"
 server:
   port: ":3000"
 adsEnabled: true
-adsPositions:
+postLengthAdPositionMap:
   3: 1
   17: 16
 itemPerPage:    27
