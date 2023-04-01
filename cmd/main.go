@@ -32,6 +32,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
+
 	logger.Info("config loaded", zap.Any("config", conf))
 
 	couchbaseRepo, err := repository.NewPostRepository(&conf.Couchbase)

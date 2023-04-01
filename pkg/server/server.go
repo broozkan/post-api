@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,7 +17,7 @@ type Handler interface {
 }
 
 type Server struct {
-	app    *fiber.App
+	App    *fiber.App
 	config config.Server
 	logger *zap.Logger
 }
@@ -26,12 +25,12 @@ type Server struct {
 func New(logger *zap.Logger, serverConfig config.Server, handlers []Handler) Server {
 	app := fiber.New()
 
-	server := Server{app: app, config: serverConfig, logger: logger}
-	server.app.Use(cors.New())
+	server := Server{App: app, config: serverConfig, logger: logger}
+	server.App.Use(cors.New())
 	server.addRoutes()
 
 	for _, handler := range handlers {
-		handler.RegisterRoutes(server.app)
+		handler.RegisterRoutes(server.App)
 	}
 
 	return server
@@ -43,28 +42,27 @@ func (s Server) Run() {
 	go func() {
 		shutdownSignal := <-shutdownChan
 		s.logger.Info("Received interrupt signal", zap.String("shutdownSignal", shutdownSignal.String()))
-		if err := s.app.Shutdown(); err != nil {
+		if err := s.App.Shutdown(); err != nil {
 			s.logger.Info("Failed to shutdown gracefully", zap.Error(err))
 			return
 		}
 		s.logger.Info("application shutdown gracefully")
 	}()
-	fmt.Println(s.config.Port)
-	err := s.app.Listen(s.config.Port)
+	err := s.App.Listen(s.config.Port)
 	if err != nil {
 		s.logger.Panic(err.Error())
 	}
 }
 
 func (s Server) Stop() {
-	err := s.app.Shutdown()
+	err := s.App.Shutdown()
 	if err != nil {
 		s.logger.Info("Graceful shutdown failed")
 	}
 }
 
 func (s Server) addRoutes() {
-	s.app.Get("/health", healthCheck)
+	s.App.Get("/health", healthCheck)
 }
 
 func healthCheck(c *fiber.Ctx) error {

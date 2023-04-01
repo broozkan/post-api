@@ -1,0 +1,19 @@
+appname: "post-api-valid-test"
+server:
+  port: ":3000"
+adsEnabled: false
+minPostLengthForAd: 3
+itemPerPage:    25
+authorPrefix:   "t2_"
+authorIDLength: 8
+couchbase:
+  url: "couchbase://localhost"
+  username: admin
+  password: password
+  buckets:
+    - name: "post"
+      scopes:
+        - name: ""
+          collections:
+            - name: "posts"
+              createPrimaryIndex: true
