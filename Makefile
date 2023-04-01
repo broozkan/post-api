@@ -1,5 +1,8 @@
+up:
+	docker-compose up
+
 integration-test:
-	go clean --testcache && go test -v ./cmd -run TestMain
+	go clean --testcache && go test -v ./cmd -run TestIntegration
 
 code-coverage:
 	go test `go list ./... | grep -vE "/tilt_modules|/metrics|/contract|/mocks|/repository"` -short -coverprofile cover.out

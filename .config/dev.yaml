@@ -9,7 +9,7 @@ itemPerPage:    27
 authorPrefix:   "t2_"
 authorIDLength: 8
 couchbase:
-  url: "couchbase://localhost"
+  url: "couchbase://couchbase"
   username: admin
   password: password
   buckets:

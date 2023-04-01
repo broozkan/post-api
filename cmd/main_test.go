@@ -342,14 +342,14 @@ func prepareDB() {
 	runCurlCommand(baseURL, createAdminUserCommand)
 
 	const newBaseURL = "curl -s -u admin:password -X POST http://localhost:8091%s"
-	createFinanceAPIBucketCommand := "/pools/default/buckets " +
+	createPostAPIBucketCommand := "/pools/default/buckets " +
 		"-d flushEnabled=1 " +
 		"-d name=post " +
 		"-d ramQuotaMB=100 " +
 		"-d replicaNumber=0 " +
 		"-d evictionPolicy=fullEviction " +
 		"-d bucketType=couchbase"
-	runCurlCommand(newBaseURL, createFinanceAPIBucketCommand)
+	runCurlCommand(newBaseURL, createPostAPIBucketCommand)
 
 	createTestBucketCommand := "/pools/default/buckets " +
 		"-d flushEnabled=1 " +

@@ -24,6 +24,7 @@ func New(couchbaseConfig *config.Couchbase) (*Couchbase, error) {
 		Username: couchbaseConfig.Username,
 		Password: couchbaseConfig.Password,
 	})
+
 	if err != nil {
 		return nil, err
 	}
