@@ -8,7 +8,7 @@ import (
 	"broozkan/postapi/internal/models"
 )
 
-func addPromotedPost(posts []*models.Post, promoted *models.Post, index int) ([]*models.Post, error) {
+func AddPromotedPost(posts []*models.Post, promoted *models.Post, index int) ([]*models.Post, error) {
 	if index > len(posts) {
 		return nil, fmt.Errorf("invalid index %d, posts has length %d", index, len(posts))
 	}
@@ -32,12 +32,23 @@ func randomString(n int) string {
 	return string(result)
 }
 
-func prepareIndices(posts []*models.Post, adPositions map[int]int) []int {
+func PrepareIndices(posts []*models.Post, adPositions map[int]int) []int {
 	var adIndices []int
 	for k, v := range adPositions {
-		if len(posts) >= k {
-			adIndices = append(adIndices, v)
+		if len(posts) < k {
+			continue
 		}
+		adIndex := v
+		if adIndex == 0 || adIndex == len(posts) {
+			continue
+		}
+		if adIndex > 0 && posts[adIndex-1].NSFW {
+			continue
+		}
+		if adIndex < len(posts)-1 && posts[adIndex+1].NSFW {
+			continue
+		}
+		adIndices = append(adIndices, adIndex)
 	}
 	return adIndices
 }

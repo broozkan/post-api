@@ -11,12 +11,13 @@ import (
 )
 
 func parseQueryStringParams(queryParams []byte) map[string]string {
+	const secondary = 2
 	filterMap := make(map[string]string)
 	params := string(queryParams)
 	kvPairs := strings.Split(params, "&")
 	for _, kv := range kvPairs {
 		parts := strings.Split(kv, "=")
-		if len(parts) != 2 {
+		if len(parts) != secondary {
 			continue
 		}
 		key := parts[0]

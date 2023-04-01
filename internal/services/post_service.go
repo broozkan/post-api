@@ -53,7 +53,7 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 		return nil, err
 	}
 
-	if len(posts) >= 3 && s.conf.AdsEnabled {
+	if len(posts) >= s.conf.MinPostLengthForAd && s.conf.AdsEnabled {
 		var promotedPosts []*models.Post
 		promotedPosts, err = s.repository.GetPromotedPosts(len(s.conf.AdsPositions))
 		if err != nil {
@@ -61,10 +61,10 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 		}
 
 		if len(promotedPosts) != 0 {
-			adIndices := prepareIndices(posts, s.conf.AdsPositions)
+			adIndices := PrepareIndices(posts, s.conf.AdsPositions)
 			for _, idx := range adIndices {
 				promotedPost := promotedPosts[generateRandomNumber(int64(len(promotedPosts)))]
-				posts, err = addPromotedPost(posts, promotedPost, idx)
+				posts, err = AddPromotedPost(posts, promotedPost, idx)
 				if err != nil {
 					return nil, err
 				}

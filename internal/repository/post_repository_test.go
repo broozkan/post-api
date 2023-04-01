@@ -179,10 +179,9 @@ func (s *CouchbaseTestSuite) TestGetRankedPosts() {
 		}
 		posts, err = repo.GetRankedPosts(0, 10, params)
 		require.Nil(s.T(), err)
-		require.Len(s.T(), posts, 2)
+		require.Len(s.T(), posts, 1)
 
-		// check that the first post is Post 2 (promoted)
-		require.Equal(s.T(), posts[0].ID, "2")
+		require.Equal(s.T(), posts[0].ID, "1")
 	})
 }
 

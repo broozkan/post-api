@@ -25,7 +25,7 @@ func (c *Couchbase) CreatePost(post *models.Post) error {
 }
 
 func (c *Couchbase) GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error) {
-	query := "SELECT * FROM `post`.`_default`.`posts` as postData WHERE 1=1"
+	query := "SELECT * FROM `post`.`_default`.`posts` as postData WHERE `promoted`=false"
 
 	if subreddit, ok := params["subreddit"]; ok {
 		query += fmt.Sprintf(" AND `subreddit` = '%s'", subreddit)
