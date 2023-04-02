@@ -19,6 +19,7 @@ func TestConfig_New(t *testing.T) {
 
 		expectedConfig := &config.Config{
 			AppName:            "something-special",
+			LogLevel:           "debug",
 			Server:             config.Server{Port: "1111"},
 			AdsEnabled:         false,
 			MinPostLengthForAd: 3,

@@ -2,7 +2,7 @@ version: "3.9"
 services:
   couchbase:
     build:
-      context: ./.dev/deployment/couchbase
+      context: ./.dev/deployment/couchbase-arm
       dockerfile: Dockerfile
     container_name: couchbase
     environment:
@@ -43,6 +43,8 @@ services:
     command: ["./wait-for-couchbase.sh", "./app"]
     networks:
       - docker_default
+    logging:
+      driver: none
 
 networks:
   docker_default:

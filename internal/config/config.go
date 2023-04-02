@@ -7,10 +7,11 @@ import (
 type (
 	Config struct {
 		AppName                 string
+		LogLevel                string
 		Server                  Server
 		AdsEnabled              bool
 		MinPostLengthForAd      int
-		PostLengthAdPositionMap map[int]int
+		PostLengthAdPositionMap map[int]int // the key of that map represents the length of posts. If posts length greater or equal then the promoted post will insert to the corresponding value
 		ItemPerPage             int
 		AuthorPrefix            string
 		AuthorIDLength          int

@@ -24,14 +24,20 @@ func main() {
 
 func run() error {
 	appEnv := os.Getenv("APP_ENV")
-	logger, _ := zap.NewProduction()
-	defer func() {
-		_ = logger.Sync()
-	}()
+
 	conf, err := config.New("../.config", appEnv)
 	if err != nil {
 		return err
 	}
+
+	logger, err := initLogger(conf.LogLevel)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		_ = logger.Sync()
+	}()
 
 	logger.Info("config loaded", zap.Any("config", conf))
 
@@ -58,4 +64,30 @@ func run() error {
 	s.Run()
 
 	return nil
+}
+
+func initLogger(logLevel string) (*zap.Logger, error) {
+	if logLevel == "" {
+		logLevel = "debug"
+	}
+	var level zap.AtomicLevel
+	if err := level.UnmarshalText([]byte(logLevel)); err != nil {
+		return nil, err
+	}
+
+	conf := zap.Config{
+		Level:            level,
+		Development:      true,
+		Encoding:         "console",
+		EncoderConfig:    zap.NewDevelopmentEncoderConfig(),
+		OutputPaths:      []string{"stdout"},
+		ErrorOutputPaths: []string{"stderr"},
+	}
+
+	logger, err := conf.Build()
+	if err != nil {
+		panic(err)
+	}
+
+	return logger, nil
 }

@@ -38,8 +38,30 @@ The application uses configuration files in YAML format located in the `.config`
 
 You should copy the relevant configuration file to `./config` in the root directory of the project and modify it to suit your needs.
 
+
+
 Running the Application
 -----------------------
+
+### Couchbase Image Path (skip this if you are not using apple silicon)
+
+If you are using an Apple Silicon-based machine, you need to update the path of the Couchbase image in the `docker-compose.yml` file. There are two different paths for the `couchbase` and `couchbase-arm` folders located in the `.dev/deployment` directory. Follow the steps below to update the image path:
+
+1.  Open the `docker-compose.yml` file in a text editor.
+2.  Find the `couchbase` service and replace the `image` field with the path of the `couchbase` or `couchbase-arm` folder depending on your machine architecture.
+
+    yamlCopy code
+
+    ```
+    couchbase:
+    image: couchbase/server:community-aarch64 # change this to .dev/deployment/couchbase-arm if you are using an Apple Silicon-based machine
+    container_name: couchbase
+    ```
+
+3.  Save the changes and close the file.
+
+After making these changes, you can run the application with the updated Couchbase image path.
+
 dev.yaml is configured already for running locally
 
 You can start the application and its dependencies (Couchbase server) using Docker Compose:

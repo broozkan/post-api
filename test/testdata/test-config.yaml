@@ -1,4 +1,5 @@
 appname: something-special
+logLevel: "debug"
 server:
   port: 1111
 minPostLengthForAd: 3

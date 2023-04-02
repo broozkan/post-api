@@ -79,16 +79,16 @@ func (mr *MockRepositoryInterfaceMockRecorder) GetRankedPosts(arg0, arg1, arg2 i
 }
 
 // GetTotalPostsCount mocks base method.
-func (m *MockRepositoryInterface) GetTotalPostsCount() (int, error) {
+func (m *MockRepositoryInterface) GetTotalPostsCount(arg0 map[string]string) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetTotalPostsCount")
+	ret := m.ctrl.Call(m, "GetTotalPostsCount", arg0)
 	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetTotalPostsCount indicates an expected call of GetTotalPostsCount.
-func (mr *MockRepositoryInterfaceMockRecorder) GetTotalPostsCount() *gomock.Call {
+func (mr *MockRepositoryInterfaceMockRecorder) GetTotalPostsCount(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTotalPostsCount", reflect.TypeOf((*MockRepositoryInterface)(nil).GetTotalPostsCount))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTotalPostsCount", reflect.TypeOf((*MockRepositoryInterface)(nil).GetTotalPostsCount), arg0)
 }

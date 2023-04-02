@@ -27,20 +27,9 @@ func (c *Couchbase) CreatePost(post *models.Post) error {
 func (c *Couchbase) GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error) {
 	query := fmt.Sprintf("SELECT * FROM `%s`.`_default`.`%s` as postData WHERE `promoted`=false", c.PostBucketName, c.PostCollectionName)
 
-	if subreddit, ok := params["subreddit"]; ok {
-		query += fmt.Sprintf(" AND `subreddit` = '%s'", subreddit)
-	}
-
-	if author, ok := params["author"]; ok {
-		query += fmt.Sprintf(" AND `author` = '%s'", author)
-	}
-
-	if nsfw, ok := params["nsfw"]; ok {
-		nsfwBool, err := strconv.ParseBool(nsfw)
-		if err != nil {
-			return nil, err
-		}
-		query += fmt.Sprintf(" AND `nsfw` = %t", nsfwBool)
+	query, err := addFilters(query, params)
+	if err != nil {
+		return nil, err
 	}
 
 	query += fmt.Sprintf(" ORDER BY `score` DESC LIMIT %d OFFSET %d", limit, offset)
@@ -84,8 +73,13 @@ func (c *Couchbase) GetPromotedPosts(count int) ([]*models.Post, error) {
 	return posts, nil
 }
 
-func (c *Couchbase) GetTotalPostsCount() (int, error) {
+func (c *Couchbase) GetTotalPostsCount(params map[string]string) (int, error) {
 	query := fmt.Sprintf("SELECT COUNT(*) as count FROM `%s`.`_default`.`%s`", c.PostBucketName, c.PostCollectionName)
+
+	query, err := addFilters(query, params)
+	if err != nil {
+		return 0, err
+	}
 
 	result, err := c.Cluster.Query(query, &gocb.QueryOptions{Adhoc: true})
 	if err != nil {
@@ -104,4 +98,23 @@ func (c *Couchbase) GetTotalPostsCount() (int, error) {
 	}
 
 	return countRow.Count, nil
+}
+
+func addFilters(query string, params map[string]string) (string, error) {
+	if subreddit, ok := params["subreddit"]; ok {
+		query += fmt.Sprintf(" AND `subreddit` = '%s'", subreddit)
+	}
+
+	if author, ok := params["author"]; ok {
+		query += fmt.Sprintf(" AND `author` = '%s'", author)
+	}
+
+	if nsfw, ok := params["nsfw"]; ok {
+		nsfwBool, err := strconv.ParseBool(nsfw)
+		if err != nil {
+			return "", err
+		}
+		query += fmt.Sprintf(" AND `nsfw` = %t", nsfwBool)
+	}
+	return query, nil
 }

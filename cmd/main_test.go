@@ -181,7 +181,7 @@ func TestIntegration(t *testing.T) {
 				byteArr, _ := json.Marshal(data)
 				var listPostsResponse models.ListPostsResponse
 				_ = json.Unmarshal(byteArr, &listPostsResponse)
-				assert.Equal(t, 26, len(listPostsResponse.Posts))
+				assert.Equal(t, 25, len(listPostsResponse.Posts))
 			},
 			shouldCheckExpectedResult: false,
 			expectedResult:            nil,

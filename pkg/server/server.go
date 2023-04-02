@@ -52,6 +52,7 @@ func (s Server) Run() {
 	if err != nil {
 		s.logger.Panic(err.Error())
 	}
+	s.logger.Info("http server starting", zap.String("address", "http://localhost"+s.config.Port))
 }
 
 func (s Server) Stop() {

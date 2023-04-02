@@ -149,7 +149,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		}
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(promotedPosts, nil)
-		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
+		mocksRepository.EXPECT().GetTotalPostsCount(gomock.Any()).Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
 		actualResponse, err := postService.GetPostsWithFilters(0, 25, nil)
@@ -167,7 +167,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 		}
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
-		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
+		mocksRepository.EXPECT().GetTotalPostsCount(gomock.Any()).Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
 		_, err := postService.GetPostsWithFilters(0, 25, nil)
@@ -197,7 +197,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(nil, errors.New("dummy error"))
-		mocksRepository.EXPECT().GetTotalPostsCount().Return(100, nil)
+		mocksRepository.EXPECT().GetTotalPostsCount(gomock.Any()).Return(100, nil)
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
 		_, err := postService.GetPostsWithFilters(0, 25, nil)
@@ -225,7 +225,7 @@ func TestPostService_GetPostsWithFilters(t *testing.T) {
 
 		mocksRepository.EXPECT().GetRankedPosts(gomock.Any(), gomock.Any(), gomock.Any()).Return(rankedPosts, nil)
 		mocksRepository.EXPECT().GetPromotedPosts(gomock.Any()).Return(promotedPosts, nil)
-		mocksRepository.EXPECT().GetTotalPostsCount().Return(0, errors.New("dummy error"))
+		mocksRepository.EXPECT().GetTotalPostsCount(gomock.Any()).Return(0, errors.New("dummy error"))
 
 		postService := services.NewPostService(zap.NewNop(), conf, mocksRepository)
 		_, err := postService.GetPostsWithFilters(0, 25, nil)

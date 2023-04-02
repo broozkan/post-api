@@ -16,7 +16,7 @@ type (
 		CreatePost(post *models.Post) error
 		GetRankedPosts(offset, limit int, params map[string]string) ([]*models.Post, error)
 		GetPromotedPosts(count int) ([]*models.Post, error)
-		GetTotalPostsCount() (int, error)
+		GetTotalPostsCount(params map[string]string) (int, error)
 	}
 
 	PostService struct {
@@ -72,7 +72,7 @@ func (s *PostService) GetPostsWithFilters(offset, limit int, params map[string]s
 		}
 	}
 
-	totalCount, err := s.repository.GetTotalPostsCount()
+	totalCount, err := s.repository.GetTotalPostsCount(params)
 	if err != nil {
 		return nil, err
 	}

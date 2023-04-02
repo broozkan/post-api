@@ -1,8 +1,9 @@
 appname: "post-api-dev"
+logLevel: "debug"
 server:
   port: ":3000"
 adsEnabled: true
-postLengthAdPositionMap:
+postLengthAdPositionMap: # the key of that map represents the length of posts. If posts length greater or equal then the promoted post will insert to the corresponding value
   3: 1
   17: 16
 itemPerPage:    27

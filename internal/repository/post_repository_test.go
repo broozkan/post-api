@@ -260,7 +260,7 @@ func (s *CouchbaseTestSuite) TestGetTotalCount() {
 		s.clearCollection(repo.Cluster)
 		time.Sleep(time.Second * 1)
 
-		count, _ := repo.GetTotalPostsCount()
+		count, _ := repo.GetTotalPostsCount(nil)
 		assert.Equal(s.T(), 0, count)
 	})
 	s.Run("given two document when called then it should return valid count", func() {
@@ -302,7 +302,7 @@ func (s *CouchbaseTestSuite) TestGetTotalCount() {
 
 		time.Sleep(time.Second * 1)
 
-		count, _ := repo.GetTotalPostsCount()
+		count, _ := repo.GetTotalPostsCount(nil)
 		assert.Equal(s.T(), 2, count)
 	})
 }
