@@ -1,8 +1,10 @@
+# this docker-compose file configured for localhost
 version: "3.9"
 services:
   couchbase:
     build:
-      context: ./.dev/deployment/couchbase-arm
+      context: ./.dev/deployment/couchbase
+      #context: ./.dev/deployment/couchbase-arm --- enable this line instead of above one if you are using apple silicon
       dockerfile: Dockerfile
     container_name: couchbase
     environment:

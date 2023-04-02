@@ -74,6 +74,14 @@ make up
 
 This will start the Couchbase server and the PostAPI service.
 
+**Note:** If you encounter the error `network docker_default not found` when running the `docker-compose up` command, you need to create the Docker network manually.
+
+To create the Docker network, run the following command:
+
+```
+docker network create docker_default
+```
+
 Running Unit Tests
 ------------------
 
