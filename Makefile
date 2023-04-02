@@ -18,6 +18,9 @@ unit-test:
 lint:
 	golangci-lint run -c .dev/.golangci.yml
 
+security-test:
+	gosec ./...
+
 generate-mocks:
 	mockgen -destination=internal/mocks/mock_post_service.go -package mocks broozkan/postapi/handlers PostServiceInterface
 	mockgen -destination=internal/mocks/mock_post_repository.go -package mocks broozkan/postapi/internal/services RepositoryInterface
