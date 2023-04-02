@@ -44,6 +44,13 @@ func TestConfig_New(t *testing.T) {
 								{
 									Name:               "posts",
 									CreatePrimaryIndex: true,
+									FieldIndexes: []string{
+										"promoted",
+										"subreddit",
+										"author",
+										"nsfw",
+										"score",
+									},
 								},
 							},
 						}},

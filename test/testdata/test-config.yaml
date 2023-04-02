@@ -21,3 +21,9 @@ couchbase:
           collections:
             - name: "posts"
               createPrimaryIndex: true
+              fieldIndexes:
+                - "promoted"
+                - "subreddit"
+                - "author"
+                - "nsfw"
+                - "score"
