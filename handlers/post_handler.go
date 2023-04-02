@@ -39,6 +39,7 @@ func (h *PostHandler) RegisterRoutes(app *fiber.App) {
 }
 
 func (h *PostHandler) CreatePostHandler(c *fiber.Ctx) error {
+	h.logger.Debug("CreatePost request arrived")
 	post := new(models.Post)
 	if err := c.BodyParser(post); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
