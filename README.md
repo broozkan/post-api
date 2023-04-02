@@ -20,15 +20,17 @@ The application uses configuration files in YAML format located in the `.config`
 -   `staging.yaml`: staging environment
 -   `prod.yaml`: production environment
 
-You should copy the relevant configuration file to `config.yaml` in the root directory of the project and modify it to suit your needs.
+You should copy the relevant configuration file to `./config` in the root directory of the project and modify it to suit your needs.
 
 Running the Application
 -----------------------
+dev.yaml is configured already for running locally
 
 You can start the application and its dependencies (Couchbase server) using Docker Compose:
 
 
 ```
+export APP_ENV=dev
 make up
 ```
 
