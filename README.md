@@ -11,6 +11,22 @@ Prerequisites
 -   Golang 1.20
 -   gosec (not mandatory)
 
+Folder Structure
+----------------
+
+The project's folder structure is organized as follows:
+
+-   `cmd`: contains the main application file and its tests.
+-   `handlers`: contains the HTTP request handlers and their tests.
+-   `internal`: contains the internal packages of the application, including its services, repository, models, and configuration, and their tests.
+-   `pkg`: contains the shared packages that can be used by different applications. Currently, it only includes the server package that provides a basic HTTP server implementation.
+-   `test`: contains the test data used in the unit and integration tests.
+-   `Dockerfile`: the Dockerfile used to build the Docker image of the application.
+-   `Makefile`: includes various commands to build, test, and run the application.
+-   `README.md`: provides instructions and information about the project.
+-   `docker-compose.yml`: the Docker Compose file used to run the application and its dependencies.
+-   `go.mod` and `go.sum`: the Go module files that define the project's dependencies.
+
 Configuration
 -------------
 
