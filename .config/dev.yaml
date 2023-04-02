@@ -1,0 +1,29 @@
+appname: "post-api-dev"
+logLevel: "debug"
+server:
+  port: ":3000"
+minPostLengthForAd: 3
+adsEnabled: true
+postLengthAdPositionMap: # the key of that map represents the length of posts. If posts length greater or equal then the promoted post will insert to the corresponding value
+  3: 1
+  17: 16
+itemPerPage:    27
+authorPrefix:   "t2_"
+authorIDLength: 8
+couchbase:
+  url: "couchbase://couchbase"
+  username: admin
+  password: password
+  buckets:
+    - name: "post"
+      scopes:
+        - name: ""
+          collections:
+            - name: "posts"
+              createPrimaryIndex: true
+              fieldIndexes:
+                - "promoted"
+                - "subreddit"
+                - "author"
+                - "nsfw"
+                - "score"

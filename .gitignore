@@ -1,0 +1,8 @@
+log/
+/_trash/
+.idea/
+/tilt_modules
+trufflehog.log
+/snyk-*
+cover.out
+coverage.html

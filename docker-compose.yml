@@ -1,0 +1,53 @@
+# this docker-compose file configured for localhost
+version: "3.9"
+services:
+  couchbase:
+    build:
+      context: ./.dev/deployment/couchbase
+      #context: ./.dev/deployment/couchbase-arm --- enable this line instead of above one if you are using apple silicon
+      dockerfile: Dockerfile
+    container_name: couchbase
+    environment:
+      - COUCHBASE_HOST=localhost
+      - COUCHBASE_USER=admin
+      - COUCHBASE_PASS=password
+    ports:
+      - "8091:8091"
+      - "8092:8092"
+      - "8093:8093"
+      - "8094:8094"
+      - "11207:11207"
+      - "11210:11210"
+      - "11211:11211"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    command: /bin/bash -c "/entrypoint.sh couchbase-server & sleep 15 && /opt/couchbase/configure.sh && wait"
+    networks:
+      - docker_default
+
+  post-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: post-api
+    depends_on:
+      couchbase:
+        condition: service_healthy
+    environment:
+      - COUCHBASE_HOST=couchbase
+      - COUCHBASE_USER=admin
+      - COUCHBASE_PASS=password
+    ports:
+      - "3000:3000"
+    command: ["./wait-for-couchbase.sh", "./app"]
+    networks:
+      - docker_default
+    logging:
+      driver: none
+
+networks:
+  docker_default:
+    external: true

@@ -1,0 +1,29 @@
+appname: something-special
+logLevel: "debug"
+server:
+  port: 1111
+minPostLengthForAd: 3
+adsEnabled: false
+postLengthAdPositionMap:
+  3: 2
+  17: 16
+itemPerPage: 27
+authorPrefix:   "t2"
+authorIDLength: 8
+couchbase:
+  url: url
+  username: username
+  password: password
+  buckets:
+    - name: "post"
+      scopes:
+        - name: ""
+          collections:
+            - name: "posts"
+              createPrimaryIndex: true
+              fieldIndexes:
+                - "promoted"
+                - "subreddit"
+                - "author"
+                - "nsfw"
+                - "score"
